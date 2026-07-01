@@ -12,13 +12,17 @@ export default function Select({ label, value, onChange, options, placeholder = 
         id={id}
         value={value ?? ''}
         onChange={(e) => onChange?.(e.target.value)}
+        // colorScheme:'light' força o dropdown nativo a renderizar claro
+        // mesmo com o SO em modo escuro — sem isso, o texto das <option>
+        // (sempre escuro) fica ilegível num popup nativo escuro.
+        style={{ colorScheme: 'light' }}
         className={cx(inputBase, 'cursor-pointer', !value && 'text-stone-400', error && inputError)}
       >
         <option value="" disabled>
           {placeholder}
         </option>
         {options.map((o) => (
-          <option key={o.value} value={o.value} className="text-stone-900">
+          <option key={o.value} value={o.value} className="bg-white text-stone-900">
             {o.label}
           </option>
         ))}
