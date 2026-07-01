@@ -31,20 +31,27 @@ async function parseJson(res) {
 
 // -------------------------------------------------------------
 //  LOGIN  → guarda admin_token no localStorage
+//  A credencial REAL (e-mail/senha da equipe) mora só no n8n — nunca no
+//  frontend. O mock abaixo usa um valor de teste só para exercitar a UI.
 // -------------------------------------------------------------
-export async function adminLogin(password) {
+const MOCK_ADMIN_EMAIL = 'admin@teste.com'
+const MOCK_ADMIN_PASSWORD = 'teste123'
+
+export async function adminLogin(email, password) {
   if (CONFIG.USE_MOCK || !CONFIG.ADMIN_LOGIN_ENDPOINT) {
     await sleep(450)
-    if (password !== 'axle') throw new Error('Senha incorreta.') // senha de demonstração no mock
+    if (email !== MOCK_ADMIN_EMAIL || password !== MOCK_ADMIN_PASSWORD) {
+      throw new Error('E-mail ou senha incorretos.')
+    }
     setAdminToken('mock-admin-token')
     return { admin_token: 'mock-admin-token' }
   }
   const res = await fetch(CONFIG.ADMIN_LOGIN_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ password }),
+    body: JSON.stringify({ email, password }),
   })
-  if (res.status === 401) throw new Error('Senha incorreta.')
+  if (res.status === 401) throw new Error('E-mail ou senha incorretos.')
   if (!res.ok) throw new Error(`Login respondeu ${res.status}`)
   const data = await parseJson(res)
   if (!data.admin_token) throw new Error('Resposta de login sem admin_token.')

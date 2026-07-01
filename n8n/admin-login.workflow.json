@@ -1,0 +1,85 @@
+{
+  "name": "Onboarding Axle — Admin Login",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "admin/login",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-admin-login",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [280, 300]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\nconst email = (body.email || '').trim().toLowerCase();\nconst password = body.password || '';\n\nconst expectedEmail = ($env.ADMIN_EMAIL || '').trim().toLowerCase();\nconst expectedPassword = $env.ADMIN_PASSWORD || '';\nconst adminToken = $env.ADMIN_TOKEN || '';\n\nconst ok = email && password && email === expectedEmail && password === expectedPassword;\n\nreturn [{ json: { ok, admin_token: ok ? adminToken : null } }];"
+      },
+      "id": "code-check-credentials",
+      "name": "Conferir credenciais",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "cond-ok",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "true", "singleValue": true }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-ok",
+      "name": "Credenciais corretas?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"admin_token\": $json.admin_token } }}",
+        "options": { "responseCode": 200 }
+      },
+      "id": "respond-ok",
+      "name": "Responder 200 (ok)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [940, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"error\": \"invalid_credentials\" } }}",
+        "options": { "responseCode": 401 }
+      },
+      "id": "respond-fail",
+      "name": "Responder 401 (falhou)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [940, 420]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Conferir credenciais", "type": "main", "index": 0 }]] },
+    "Conferir credenciais": { "main": [[{ "node": "Credenciais corretas?", "type": "main", "index": 0 }]] },
+    "Credenciais corretas?": {
+      "main": [
+        [{ "node": "Responder 200 (ok)", "type": "main", "index": 0 }],
+        [{ "node": "Responder 401 (falhou)", "type": "main", "index": 0 }]
+      ]
+    }
+  }
+}

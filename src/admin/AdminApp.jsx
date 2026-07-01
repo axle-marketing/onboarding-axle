@@ -42,6 +42,7 @@ export default function AdminApp() {
 }
 
 function AdminLogin({ onSuccess }) {
+  const [email, setEmail] = useState('')
   const [pw, setPw] = useState('')
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState('')
@@ -51,7 +52,7 @@ function AdminLogin({ onSuccess }) {
     setBusy(true)
     setErr('')
     try {
-      await adminLogin(pw)
+      await adminLogin(email, pw)
       onSuccess()
     } catch (ex) {
       setErr(ex.message || 'Falha no login.')
@@ -72,17 +73,28 @@ function AdminLogin({ onSuccess }) {
           </span>
           <h1 className="text-lg font-bold text-stone-800 dark:text-stone-100">Área da equipe</h1>
         </div>
-        <TextField
-          label="Senha"
-          type="password"
-          value={pw}
-          onChange={setPw}
-          placeholder="••••••••"
-          error={err}
-        />
+        <div className="space-y-3">
+          <TextField
+            label="E-mail"
+            type="email"
+            autoComplete="username"
+            value={email}
+            onChange={setEmail}
+            placeholder="voce@axlemarketinggroup.com"
+          />
+          <TextField
+            label="Senha"
+            type="password"
+            autoComplete="current-password"
+            value={pw}
+            onChange={setPw}
+            placeholder="••••••••"
+            error={err}
+          />
+        </div>
         <button
           type="submit"
-          disabled={busy || !pw}
+          disabled={busy || !email || !pw}
           className="btn-primary mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold"
         >
           {busy && <Loader2 className="animate-spin" size={16} />}
