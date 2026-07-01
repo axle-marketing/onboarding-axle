@@ -70,7 +70,7 @@ export function blankDraft() {
         is_storefront: false,
         pending: false,
       },
-      service_area: { cities: [], notes: '' }, // limite de 20 aplicado na UI
+      service_area: { cities: [], notes: '', state: '' }, // limite de 20 aplicado na UI
       hours: defaultHours(),
       phone: '',
       website: '',

@@ -62,6 +62,7 @@ export function validateStep(id, draft) {
           req(filled(g.address.zip), 'address.zip', 'Informe o ZIP.')
         }
       }
+      req(filled(g.service_area.state), 'service_area.state', 'Selecione o estado da área de cobertura.')
       break
     }
 

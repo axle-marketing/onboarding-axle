@@ -155,6 +155,9 @@ export default function GbpStep({ errors = {} }) {
           onChange={(cities) => set('gbp.service_area.cities', cities)}
           limit={20}
           defaultState={g.address.state}
+          state={g.service_area.state}
+          onStateChange={(v) => set('gbp.service_area.state', v)}
+          error={errors['service_area.state']}
         />
         <TextArea
           label="Notas sobre a área de serviço (opcional)"

@@ -22,8 +22,13 @@ async function loadCities(st) {
 
 const mkCity = (city, group, st) => ({ name: city.name, state: st, county: city.county, group: group.name })
 
-export default function CityPicker({ value = [], onChange, limit, defaultState = '' }) {
-  const [activeState, setActiveState] = useState(defaultState)
+export default function CityPicker({ value = [], onChange, limit, defaultState = '', state, onStateChange, error: stateError }) {
+  // Estado controlado (persistido no draft) se `state`/`onStateChange` vierem;
+  // senão, cai num estado interno (uso sem exigência de validação, ex.: LSA).
+  const isControlled = state !== undefined
+  const [internalState, setInternalState] = useState(defaultState)
+  const activeState = isControlled ? state : internalState
+  const setActiveState = isControlled ? onStateChange : setInternalState
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -91,7 +96,8 @@ export default function CityPicker({ value = [], onChange, limit, defaultState =
         onChange={setActiveState}
         options={stateOptions}
         placeholder="Escolha o estado para listar as cidades"
-        help="Pode trocar de estado e continuar adicionando — as selecionadas ficam guardadas."
+        help={stateError ? undefined : 'Pode trocar de estado e continuar adicionando — as selecionadas ficam guardadas.'}
+        error={stateError}
       />
 
       {activeState && (
