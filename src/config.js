@@ -25,7 +25,9 @@ export const CONFIG = {
   // POST { email, password }     -> { admin_token }
   ADMIN_LOGIN_ENDPOINT: 'https://webhooks.axlemarketingroup.online/webhook/admin/login',
   // GET  (Authorization: token)  -> [{ task_id, company_name, niche, status }]
-  ADMIN_CLIENTS_ENDPOINT: '',
+  // Query "squad=usa" fixo aqui pra rotear no n8n só os clientes do squad
+  // americano do ClickUp (reaproveitável no futuro pra squad BR trocando o valor).
+  ADMIN_CLIENTS_ENDPOINT: 'https://webhooks.axlemarketingroup.online/webhook/clients/clickup?squad=usa',
   // POST { task_id }             -> { token, link }   (n8n assina o token com HMAC)
   ADMIN_TOKEN_ENDPOINT: '',
   // POST { token }               -> { ok }            (libera reenvio / reseta a janela)
