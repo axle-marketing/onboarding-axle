@@ -83,6 +83,7 @@ export function blankDraft() {
       owner_name: '', // prefill de owner_name
       phone: '', // prefill de gbp.phone
       email: '', // prefill do e-mail comercial
+      founded_year: '', // Google pede a idade do negócio na verificação do LSA
       coi: blankAsset(),
       fieldworkers: [], // { id, name, email }
       service_area: { cities: [], notes: '', seeded: false }, // sem limite
@@ -166,6 +167,7 @@ export function toPayload(draft, client) {
       owner_name: draft.lsa.owner_name || draft.owner_name,
       phone: draft.lsa.phone || draft.gbp.phone,
       email: resolveCommercialEmail(draft),
+      founded_year: draft.lsa.founded_year || null,
       coi: draft.lsa.coi,
       fieldworkers_count: draft.lsa.fieldworkers.length,
       fieldworkers: draft.lsa.fieldworkers.map(({ name, email }) => ({ name, email })),

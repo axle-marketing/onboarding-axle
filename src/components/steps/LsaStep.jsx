@@ -51,14 +51,25 @@ export default function LsaStep({ errors = {} }) {
         />
       </div>
 
-      <TextField
-        label="E-mail comercial"
-        type="email"
-        inputMode="email"
-        value={emailValue}
-        onChange={(v) => set('lsa.email', v)}
-        help="Pré-preenchido com seu e-mail profissional ou da conta Google."
-      />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <TextField
+          label="E-mail comercial"
+          type="email"
+          inputMode="email"
+          value={emailValue}
+          onChange={(v) => set('lsa.email', v)}
+          help="Pré-preenchido com seu e-mail profissional ou da conta Google."
+        />
+        <TextField
+          label="Ano de fundação da empresa"
+          type="number"
+          inputMode="numeric"
+          value={l.founded_year}
+          onChange={(v) => set('lsa.founded_year', v)}
+          placeholder="ex.: 2019"
+          help="O Google pede a idade do negócio na verificação do Local Services."
+        />
+      </div>
 
       {/* Explicação de fieldworker (conteúdo já vale; a lista entra na Fase 7) */}
       <div className="flex gap-3 rounded-xl border border-sky-200 bg-sky-50 p-4 text-sm dark:border-sky-500/30 dark:bg-sky-500/10">
