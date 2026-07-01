@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { BadgeCheck, Info, DownloadCloud } from 'lucide-react'
 import StepShell from '../StepShell'
 import TextField from '../fields/TextField'
+import PhoneField from '../fields/PhoneField'
 import TextArea from '../fields/TextArea'
 import CityPicker from '../fields/CityPicker'
 import FileDropzone from '../fields/FileDropzone'
@@ -42,10 +43,8 @@ export default function LsaStep({ errors = {} }) {
           help="Pré-preenchido do passo anterior."
           error={errors.owner_name}
         />
-        <TextField
+        <PhoneField
           label="Telefone comercial"
-          type="tel"
-          inputMode="tel"
           value={phoneValue}
           onChange={(v) => set('lsa.phone', v)}
           help="Pré-preenchido do GBP."

@@ -2,6 +2,8 @@ import { Mail } from 'lucide-react'
 import StepShell from '../StepShell'
 import Choice from '../fields/Choice'
 import TextField from '../fields/TextField'
+import PhoneField from '../fields/PhoneField'
+import EmailHandleField from '../fields/EmailHandleField'
 import { useOnboarding } from '../../state/onboarding'
 
 export default function GoogleStep({ errors = {} }) {
@@ -45,8 +47,8 @@ export default function GoogleStep({ errors = {} }) {
           <p className="text-xs text-stone-500 dark:text-stone-400">
             Vamos criar a conta para você. Se tiver preferências, preencha abaixo (tudo opcional).
           </p>
-          <TextField
-            label="Nome de usuário preferido (antes do @gmail.com)"
+          <EmailHandleField
+            label="Nome de usuário preferido"
             value={g.preferred_handle}
             onChange={(v) => set('google_account.preferred_handle', v)}
             placeholder="ex.: democleaningllc"
@@ -59,10 +61,8 @@ export default function GoogleStep({ errors = {} }) {
               onChange={(v) => set('google_account.recovery_email', v)}
               placeholder="opcional"
             />
-            <TextField
+            <PhoneField
               label="Telefone de recuperação"
-              type="tel"
-              inputMode="tel"
               value={g.recovery_phone}
               onChange={(v) => set('google_account.recovery_phone', v)}
               placeholder="opcional"

@@ -2,6 +2,7 @@ import { Store } from 'lucide-react'
 import StepShell from '../StepShell'
 import Choice from '../fields/Choice'
 import TextField from '../fields/TextField'
+import PhoneField from '../fields/PhoneField'
 import TextArea from '../fields/TextArea'
 import Select from '../fields/Select'
 import PendingField from '../fields/PendingField'
@@ -122,14 +123,10 @@ export default function GbpStep({ errors = {} }) {
 
       {/* Comum aos dois caminhos */}
       <div className="grid gap-4 sm:grid-cols-2">
-        <TextField
+        <PhoneField
           label="Número comercial (recebe as ligações dos leads)"
-          type="tel"
-          inputMode="tel"
-          autoComplete="tel"
           value={g.phone}
           onChange={(v) => set('gbp.phone', v)}
-          placeholder="(617) 555-0148"
           help="Esse número será reaproveitado no Local Services."
         />
         <TextField
