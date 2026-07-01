@@ -1,0 +1,27 @@
+# Stack Docker Swarm + Traefik — mesmo padrão do googleads-dashboard.
+# Imagem publicada no GHCR (pela GitHub Action .github/workflows/deploy.yml).
+version: "3.8"
+
+services:
+  onboarding:
+    image: ghcr.io/axle-marketing/onboarding-axle:latest
+    networks:
+      - network-axle
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=network-axle
+        - traefik.http.routers.onboarding.rule=Host(`onboarding.axlemarketingroup.online`)
+        - traefik.http.routers.onboarding.entrypoints=websecure
+        - traefik.http.routers.onboarding.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.onboarding.priority=10
+        - traefik.http.routers.onboarding.service=onboarding
+        - traefik.http.services.onboarding.loadbalancer.server.port=80
+        - traefik.http.services.onboarding.loadbalancer.passHostHeader=1
+
+networks:
+  network-axle:
+    external: true

@@ -1,0 +1,33 @@
+name: build-and-push
+
+# Builda a imagem e publica no GHCR (ghcr.io/axle-marketing/onboarding-axle:latest)
+# a cada push na main. No servidor, é só puxar a nova imagem:
+#   docker service update --force onboarding_onboarding
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/axle-marketing/onboarding-axle:latest
+            ghcr.io/axle-marketing/onboarding-axle:${{ github.sha }}

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "onboarding-axle",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--base=/", "--port", "5180", "--strictPort"],
+      "port": 5180
+    }
+  ]
+}

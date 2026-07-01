@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-paper font-sans text-ink antialiased dark:bg-ink dark:text-stone-100;
+    /* respeita o notch em iPhones (PWA-like) */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+      env(safe-area-inset-left);
+  }
+  /* Títulos usam a grotesca geométrica da marca */
+  h1,
+  h2,
+  h3 {
+    @apply font-display tracking-tight;
+  }
+  input,
+  select,
+  textarea,
+  button {
+    font: inherit;
+  }
+}
+
+@layer components {
+  /* Botão primário monocromático com inversão no dark (ink <-> paper) */
+  .btn-primary {
+    @apply bg-ink text-paper transition-colors hover:bg-ink/90 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-paper dark:text-ink dark:hover:bg-white;
+  }
+  /* Rótulo/eyebrow em caixa-alta com tracking (assinatura da IDV) */
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-eyebrow text-stone-400;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(120 113 108 / 0.4) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: rgb(120 113 108 / 0.4);
+    border-radius: 9999px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
