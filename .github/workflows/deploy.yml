@@ -2,14 +2,21 @@ name: build-and-push
 
 # Builda a imagem e publica no GHCR (ghcr.io/axle-marketing/onboarding-axle:latest)
 # a cada push na main, depois conecta via SSH no servidor e roda
-# "docker service update --force onboarding-axle_onboarding" para o Swarm
-# repuxar a imagem nova (ver DEPLOY.md).
+# "docker service update --image ...:latest --force onboarding-axle_onboarding"
+# para o Swarm repuxar a imagem nova (ver DEPLOY.md).
+#
+# IMPORTANTE: o --image é obrigatório aqui. Sem ele, "docker service update
+# --force" sozinho só reinicia os containers com a MESMA imagem que já
+# estava rodando — o Swarm não vai atrás de uma versão nova da tag "latest"
+# por conta própria.
 #
 # Requer os secrets (Settings > Secrets and variables > Actions):
 #   DEPLOY_HOST     — IP/domínio do servidor
 #   DEPLOY_USER     — usuário SSH (root)
 #   DEPLOY_SSH_KEY  — chave privada dedicada; restrita no servidor via
-#                     "command=" em authorized_keys a rodar só esse comando.
+#                     "command=" em authorized_keys a rodar só esse comando
+#                     (o valor do "command=" no servidor precisa bater com
+#                     o script abaixo — veja n8n/README.md e DEPLOY.md).
 on:
   push:
     branches: [main]
@@ -48,4 +55,4 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          script: docker service update --force onboarding-axle_onboarding
+          script: docker service update --image ghcr.io/axle-marketing/onboarding-axle:latest --force onboarding-axle_onboarding

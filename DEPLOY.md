@@ -21,19 +21,27 @@ já que o `googleads-dashboard` já puxa do mesmo `ghcr.io/axle-marketing/...` n
 
 ## 2) Auto-deploy a cada push (SSH restrito)
 Feito ✅ — a cada push na `main`, a Action builda a imagem, publica no GHCR e depois
-conecta via SSH no servidor pra rodar `docker service update --force onboarding-axle_onboarding`.
+conecta via SSH no servidor pra rodar:
+```bash
+docker service update --image ghcr.io/axle-marketing/onboarding-axle:latest --force onboarding-axle_onboarding
+```
+
+⚠️ **O `--image` é obrigatório.** Sem ele, `docker service update --force` sozinho só
+reinicia os containers com a MESMA imagem que já estava rodando — o Swarm não vai
+atrás de uma versão nova da tag `latest` por conta própria.
 
 Configuração (já aplicada):
 - No servidor, uma linha dedicada em `~/.ssh/authorized_keys` (do usuário `root`),
-  com **forced command**: essa chave só consegue rodar esse único comando de
-  redeploy — nada de shell, túnel ou qualquer outra coisa, mesmo que o secret vaze.
+  com **forced command** contendo exatamente o comando acima (com `--image`): essa
+  chave só consegue rodar esse único comando de redeploy — nada de shell, túnel ou
+  qualquer outra coisa, mesmo que o secret vaze.
 - No repositório GitHub, 3 secrets (Settings → Secrets and variables → Actions):
   `DEPLOY_HOST`, `DEPLOY_USER` (`root`), `DEPLOY_SSH_KEY` (chave privada dedicada).
 
 Se precisar forçar manualmente (sem esperar um push): no Portainer, abra o serviço
-e clique **"Pull and redeploy"**, ou via CLI:
+e clique **"Pull and redeploy"**, ou via CLI (sempre com `--image`):
 ```bash
-docker service update --force onboarding-axle_onboarding
+docker service update --image ghcr.io/axle-marketing/onboarding-axle:latest --force onboarding-axle_onboarding
 ```
 
 ## 3) Verificar

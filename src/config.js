@@ -22,8 +22,8 @@ export const CONFIG = {
   SUBMIT_ENDPOINT: '',
 
   // ----- Endpoints da ÁREA ADMIN -----
-  // POST { password }            -> { admin_token }
-  ADMIN_LOGIN_ENDPOINT: '',
+  // POST { email, password }     -> { admin_token }
+  ADMIN_LOGIN_ENDPOINT: 'https://webhooks.axlemarketingroup.online/webhook/admin/login',
   // GET  (Authorization: token)  -> [{ task_id, company_name, niche, status }]
   ADMIN_CLIENTS_ENDPOINT: '',
   // POST { task_id }             -> { token, link }   (n8n assina o token com HMAC)
@@ -37,5 +37,8 @@ export const CONFIG = {
   RESEND_WINDOW_MS: 60 * 60 * 1000, // 1 hora
 
   // Master switch: true = simula TUDO localmente (sem n8n).
-  USE_MOCK: true,
+  // false = cada chamada usa o endpoint real SE ele estiver preenchido;
+  // os que continuam vazios (LOAD/SAVE/UPLOAD/SUBMIT etc.) caem no mock
+  // automaticamente — dá pra ligar só o login admin sem esperar o resto.
+  USE_MOCK: false,
 }
